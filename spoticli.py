@@ -117,7 +117,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv, "", ["play=","pause","unpause","skip_forward","skip_back","status","playpause"])
     except getopt.GetoptError:
-        print "Usage: spoticli.py --play=<uri>|--pause|--unpause|--skip_forward|--skip_back|--status"
+        print "Usage: spoticli.py --play=<uri>|--pause|--unpause|--skip_forward|--skip_back|--status|--playpause"
         sys.exit(2)
     for opt, arg in opts:
         if opt == "--play":
