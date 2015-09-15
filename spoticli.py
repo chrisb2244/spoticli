@@ -57,6 +57,34 @@ class SpotifyCLI(object):
 
     def get_status(self):
         return self.get('/remote/status.json')
+    
+    def make_pretty_seconds(self, seconds):
+        # Make this minutes:seconds
+        second = seconds%60
+        minutes = (seconds - second)/60
+        # Round seconds to int, preference only.
+        # Change int(second) -> second if you want decimal places
+        return str(int(minutes)) + ":" + str(int(second)).zfill(2)
+    
+    def make_pretty_status(self, status):
+        #print status
+        print "Client version: " + status['client_version']
+        print "Online: " + str(status['online'])
+        print "Playing: " + str(status['playing'])
+        print "Repeat: " + str(status['repeat'])
+        print "Shuffle: " + str(status['shuffle'])
+        print "Track Position: " \
+            + self.make_pretty_seconds(status['playing_position']) \
+            + " / " + self.make_pretty_seconds(status['track']['length'])
+        print "Play/Prev/Next Enabled: " + str(status['play_enabled']) \
+            + "/" + str(status['prev_enabled']) + "/" \
+                + str(status['next_enabled'])
+        #print "Volume: "
+        #print "Running: "
+        #print "Version: "
+        #track: track_resource, track_type, album_resource, artist_resource
+        #open_graph_state: posting_disabled, private_session
+        
 
     def pause(self, pause=True):
         return self.get('/remote/pause.json', {'pause': json.dumps(pause)})
@@ -69,15 +97,21 @@ class SpotifyCLI(object):
             'uri': spotify_uri,
             'context': spotify_uri
         })
+    
+    def skip_forward(self):
+        return
+        
+    def prev(self):
+        return
+        
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "", ["play=","pause","unpause","skip_forward","skip_back"])
+        opts, args = getopt.getopt(argv, "", ["play=","pause","unpause","skip_forward","skip_back", "status"])
     except getopt.GetoptError:
-        print "Usage: spoticli.py --play=<uri>|--pause|--unpause|--skip_forward|--skip_back"
+        print "Usage: spoticli.py --play=<uri>|--pause|--unpause|--skip_forward|--skip_back|--status"
         sys.exit(2)
     for opt, arg in opts:
-        print opt
         if opt == "--play":
             spotify.play(arg)
         elif opt == "--pause":
@@ -85,9 +119,11 @@ def main(argv):
         elif opt == "--unpause":
             spotify.unpause()
         elif opt == "--skip_forward":
-            print "Haven't implemented yet"
+            spotify.skip_forward()
         elif opt == "--skip_back":
             print "Haven't implemented yet"
+        elif opt == "--status":
+            spotify.make_pretty_status(spotify.get_status())
 
 if __name__ == '__main__':
     spotify = SpotifyCLI()
