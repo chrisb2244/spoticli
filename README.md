@@ -15,3 +15,5 @@ Have added command line parsing.
 
 Call with '$ python spoticli.py --pause|--unpause|--skip_forward|--skip_back|--play=<spotify uri>'
 The 'skip_forward' and 'skip_back' functions are not yet implemented.
+
+Offlein added a --playpause toggle feature which has been merged
